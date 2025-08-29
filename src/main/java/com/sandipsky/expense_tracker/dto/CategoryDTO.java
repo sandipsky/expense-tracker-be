@@ -1,6 +1,8 @@
 package com.sandipsky.expense_tracker.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sandipsky.expense_tracker.entity.Category.CategoryType;
+
 import lombok.*;
 
 @Getter
@@ -9,9 +11,9 @@ public class CategoryDTO {
     private Integer id;
 
     @JsonProperty("user_id")
-    private Integer user;
+    private Integer userId;
 
-    @JsonProperty("username")
+    @JsonProperty("user_name")
     private String userName;
 
     private String name;
@@ -19,7 +21,7 @@ public class CategoryDTO {
     @JsonProperty("color_code")
     private String colorCode;
 
-    private String type;
+    private CategoryType type;
 
     private String description;
 
