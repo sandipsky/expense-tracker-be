@@ -13,8 +13,6 @@ public class AccountDTO {
 
     private String code;
 
-    private String type;
-
     private String remarks;
 
     @JsonProperty("is_active")

@@ -20,10 +20,6 @@ public class Account {
     @Column(name = "code", length = 10)
     private String code;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private AccountType type;
-
     @Column(columnDefinition = "TEXT")
     private String remarks;
 
@@ -37,8 +33,4 @@ public class Account {
     @Column(name = "updated_at")
     @org.hibernate.annotations.UpdateTimestamp
     private LocalDateTime updatedAt;
-
-    public enum AccountType {
-        Cash, Bank
-    }
 }

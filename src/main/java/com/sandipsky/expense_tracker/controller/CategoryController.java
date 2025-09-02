@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.sandipsky.expense_tracker.dto.ApiResponse;
+import com.sandipsky.expense_tracker.dto.CategoryDTO;
 import com.sandipsky.expense_tracker.entity.Category;
 import com.sandipsky.expense_tracker.service.CategoryService;
 import com.sandipsky.expense_tracker.util.ResponseUtil;
@@ -12,7 +13,7 @@ import com.sandipsky.expense_tracker.util.ResponseUtil;
 import java.util.List;
 
 @RestController
-@RequestMapping("/categorys")
+@RequestMapping("/category")
 public class CategoryController {
 
     @Autowired
@@ -24,19 +25,19 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public Category getCategory(@PathVariable int id) {
+    public CategoryDTO getCategory(@PathVariable int id) {
         return service.getCategoryById(id);
     }
 
     @PostMapping()
-    public ResponseEntity<ApiResponse<Category>> createCategory(@RequestBody Category category) {
-        Category res = service.saveCategory(category);
+    public ResponseEntity<ApiResponse<Category>> createCategory(@RequestBody CategoryDTO categoryDTO) {
+        Category res = service.saveCategory(categoryDTO);
         return ResponseEntity.ok(ResponseUtil.success(res.getId(), "Category Added successfully"));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<Category>> updateCategory(@PathVariable int id, @RequestBody Category category) {
-        Category res = service.updateCategory(id, category);
+    public ResponseEntity<ApiResponse<Category>> updateCategory(@PathVariable int id, @RequestBody CategoryDTO categoryDTO) {
+        Category res = service.updateCategory(id, categoryDTO);
         return ResponseEntity.ok(ResponseUtil.success(res.getId(), "Category Updated successfully"));
     }
 

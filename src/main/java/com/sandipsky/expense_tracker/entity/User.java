@@ -1,6 +1,10 @@
 package com.sandipsky.expense_tracker.entity;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,7 +13,7 @@ import lombok.*;
 @Getter
 @Setter
 @Table(name = "user")
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -48,4 +52,9 @@ public class User {
     @Column(name = "updated_at")
     @org.hibernate.annotations.UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
 }

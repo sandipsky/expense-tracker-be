@@ -14,7 +14,7 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
     boolean existsByNameAndIdNot(String name, int id);
 
     @Query("""
-                SELECT new com.sandipsky.inventory_system.dto.DropdownDTO(c.id, c.name)
+                SELECT new com.sandipsky.expense_tracker.dto.DropdownDTO(c.id, c.name)
                 FROM Category c
                 WHERE (:isActive IS NULL OR c.isActive = :isActive)
             """)
