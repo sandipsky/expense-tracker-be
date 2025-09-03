@@ -5,11 +5,9 @@ import org.springframework.stereotype.Service;
 
 import com.sandipsky.expense_tracker.dto.CategoryDTO;
 import com.sandipsky.expense_tracker.entity.Category;
-import com.sandipsky.expense_tracker.entity.User;
 import com.sandipsky.expense_tracker.exception.DuplicateResourceException;
 import com.sandipsky.expense_tracker.exception.ResourceNotFoundException;
 import com.sandipsky.expense_tracker.repository.CategoryRepository;
-import com.sandipsky.expense_tracker.repository.UserRepository;
 
 import java.util.List;
 
@@ -18,9 +16,6 @@ public class CategoryService {
 
     @Autowired
     private CategoryRepository repository;
-
-    @Autowired
-    private UserRepository userRepository;
 
     public Category saveCategory(CategoryDTO categoryDTO) {
         if (categoryDTO.getName() == null || categoryDTO.getName().trim().isEmpty()) {
@@ -73,8 +68,6 @@ public class CategoryService {
         dto.setDescription(category.getDescription());
         dto.setIsActive(category.getIsActive());
         dto.setType(category.getType());
-        dto.setUserId(category.getUser() != null ? category.getUser().getId() : null);
-        dto.setUserName(category.getUser() != null ? category.getUser().getUsername() : null);
         return dto;
     }
 
@@ -85,10 +78,5 @@ public class CategoryService {
         category.setDescription(dto.getDescription());
         category.setIsActive(dto.getIsActive());
         category.setType(dto.getType());
-        if (dto.getUserId() != null) {
-            User user = userRepository.findById(dto.getUserId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
-            category.setUser(user);
-        }
     }
 }

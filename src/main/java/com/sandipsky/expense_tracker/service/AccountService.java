@@ -5,22 +5,18 @@ import org.springframework.stereotype.Service;
 
 import com.sandipsky.expense_tracker.dto.AccountDTO;
 import com.sandipsky.expense_tracker.entity.Account;
-import com.sandipsky.expense_tracker.entity.User;
 import com.sandipsky.expense_tracker.exception.DuplicateResourceException;
 import com.sandipsky.expense_tracker.exception.ResourceNotFoundException;
 import com.sandipsky.expense_tracker.repository.AccountRepository;
-import com.sandipsky.expense_tracker.repository.UserRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountService {
 
     @Autowired
     private AccountRepository repository;
-
-    @Autowired
-    private UserRepository userRepository;
 
     public Account saveAccount(AccountDTO accountDTO) {
         if (accountDTO.getName() == null || accountDTO.getName().trim().isEmpty()) {
@@ -34,8 +30,11 @@ public class AccountService {
         return repository.save(account);
     }
 
-    public List<Account> getAccounts() {
-        return repository.findAll();
+    public List<AccountDTO> getAccounts() {
+        return repository.findAll()
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
     }
 
     public AccountDTO getAccountById(int id) {
@@ -69,26 +68,16 @@ public class AccountService {
         AccountDTO dto = new AccountDTO();
         dto.setId(account.getId());
         dto.setName(account.getName());
-        dto.setColorCode(account.getColorCode());
-        dto.setDescription(account.getDescription());
+        dto.setCode(account.getCode());
+        dto.setRemarks(account.getRemarks());
         dto.setIsActive(account.getIsActive());
-        dto.setType(account.getType());
-        dto.setUserId(account.getUser() != null ? account.getUser().getId() : null);
-        dto.setUserName(account.getUser() != null ? account.getUser().getUsername() : null);
         return dto;
     }
 
     private void mapDtoToEntity(AccountDTO dto, Account account) {
         account.setName(dto.getName().trim());
+        account.setCode(dto.getCode());
+        account.setRemarks(dto.getRemarks());
         account.setIsActive(dto.getIsActive());
-        account.setColorCode(dto.getColorCode());
-        account.setDescription(dto.getDescription());
-        account.setIsActive(dto.getIsActive());
-        account.setType(dto.getType());
-        if (dto.getUserId() != null) {
-            User user = userRepository.findById(dto.getUserId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Account not found"));
-            account.setUser(user);
-        }
     }
 }

@@ -10,12 +10,6 @@ import lombok.*;
 public class CategoryDTO {
     private Integer id;
 
-    @JsonProperty("user_id")
-    private Integer userId;
-
-    @JsonProperty("user_name")
-    private String userName;
-
     private String name;
 
     @JsonProperty("color_code")

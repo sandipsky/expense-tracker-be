@@ -16,7 +16,6 @@ CREATE TABLE `user` (
 
 CREATE TABLE `category` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `user_id` INT NOT NULL, 
   `name` VARCHAR(50) NOT NULL UNIQUE,
   `color_code` VARCHAR(10),
   `type` ENUM('Income', 'Expense') NOT NULL, 
@@ -24,8 +23,7 @@ CREATE TABLE `category` (
   `is_active` TINYINT(1) DEFAULT 1,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
+  PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `account` (
@@ -62,14 +60,12 @@ CREATE TABLE `budget` (
   `amount` DOUBLE DEFAULT 0 NOT NULL,
   `remarks` TEXT,
   `category_id` INT NOT NULL,
-  `user_id` INT NOT NULL,
   `period` ENUM('Daily', 'Monthly', 'Yearly') NOT NULL, 
   `notification_threshold` INT,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`category_id`) REFERENCES `category`(`id`),
-  FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
+  FOREIGN KEY (`category_id`) REFERENCES `category`(`id`)
 );
 
 
@@ -98,17 +94,17 @@ VALUES
 -- ========================
 -- CATEGORIES
 -- ========================
-INSERT INTO `category` (id, user_id, name, color_code, type, description, is_active)
+INSERT INTO `category` (id, name, color_code, type, description, is_active)
 VALUES
-(1, 101, 'Groceries', '#FF5733', 'Expense', 'Daily groceries and food items', 1),
-(2, 101, 'Utilities', '#33C1FF', 'Expense', 'Electricity, water, internet etc.', 1),
-(3, 101, 'Miscellaneous', '#DA33FF', 'Expense', 'Other expenses', 1),
-(4, 101, 'Transport', '#33FF57', 'Expense', 'Transport expenses like taxi, bus, fuel', 1),
-(5, 101, 'Dining Out', '#FFC300', 'Expense', 'Restaurants, coffee, snacks', 1),
-(6, 101, 'Entertainment', '#FF5733', 'Expense', 'Movies, subscriptions, fun', 1),
-(7, 101, 'Education', '#33FFF6', 'Expense', 'Books, stationery, courses', 1),
-(8, 101, 'Health', '#FF33A6', 'Expense', 'Medical, gym, health related', 1),
-(9, 101, 'Personal Care', '#C70039', 'Expense', 'Haircut, personal care', 1);
+(1, 'Groceries', '#FF5733', 'Expense', 'Daily groceries and food items', 1),
+(2, 'Utilities', '#33C1FF', 'Expense', 'Electricity, water, internet etc.', 1),
+(3, 'Miscellaneous', '#DA33FF', 'Expense', 'Other expenses', 1),
+(4, 'Transport', '#33FF57', 'Expense', 'Transport expenses like taxi, bus, fuel', 1),
+(5, 'Dining Out', '#FFC300', 'Expense', 'Restaurants, coffee, snacks', 1),
+(6, 'Entertainment', '#FF5733', 'Expense', 'Movies, subscriptions, fun', 1),
+(7, 'Education', '#33FFF6', 'Expense', 'Books, stationery, courses', 1),
+(8, 'Health', '#FF33A6', 'Expense', 'Medical, gym, health related', 1),
+(9, 'Personal Care', '#C70039', 'Expense', 'Haircut, personal care', 1);
 
 -- ========================
 -- TRANSACTIONS
@@ -166,7 +162,29 @@ VALUES
 (49, '2082-03-17', 'SE049', 130, 'Evening snack', 5, 104, 204),
 (50, '2082-03-18', 'SE050', 370, 'Trim and style', 9, 105, 205);
 
-
+-- ========================
+-- BUDGETS
+-- ========================
+INSERT INTO `budget` (id, amount, remarks, category_id, period, notification_threshold)
+VALUES
+(1, 5000, 'Daily groceries budget', 1, 'Daily', 80),
+(2, 20000, 'Monthly utilities budget', 2, 'Monthly', 75),
+(3, 10000, 'Miscellaneous expenses budget', 3, 'Monthly', 70),
+(4, 3000, 'Daily transport budget', 4, 'Daily', 80),
+(5, 8000, 'Monthly dining out budget', 5, 'Monthly', 70),
+(6, 5000, 'Monthly entertainment budget', 6, 'Monthly', 75),
+(7, 4000, 'Monthly education budget', 7, 'Monthly', 70),
+(8, 6000, 'Monthly health budget', 8, 'Monthly', 75),
+(9, 3000, 'Monthly personal care budget', 9, 'Monthly', 70),
+(10, 100000, 'Yearly groceries budget', 1, 'Yearly', 80),
+(11, 240000, 'Yearly utilities budget', 2, 'Yearly', 75),
+(12, 120000, 'Yearly miscellaneous budget', 3, 'Yearly', 70),
+(13, 36000, 'Yearly transport budget', 4, 'Yearly', 80),
+(14, 96000, 'Yearly dining out budget', 5, 'Yearly', 70),
+(15, 60000, 'Yearly entertainment budget', 6, 'Yearly', 75),
+(16, 48000, 'Yearly education budget', 7, 'Yearly', 70),
+(17, 72000, 'Yearly health budget', 8, 'Yearly', 75),
+(18, 36000, 'Yearly personal care budget', 9, 'Yearly', 70);
 
 
 

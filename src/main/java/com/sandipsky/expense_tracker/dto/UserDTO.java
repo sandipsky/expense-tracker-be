@@ -1,6 +1,7 @@
 package com.sandipsky.expense_tracker.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.*;
 
 @Getter
@@ -8,24 +9,17 @@ import lombok.*;
 public class UserDTO {
     private Integer id;
 
-    private Double amount;
+    private String fullName;
 
-    private String remarks;
+    private String username;
 
-    @JsonProperty("category_id")
-    private Integer categoryId;
+    private String email;
 
-    @JsonProperty("category_name")
-    private String categoryName;
+    private String password;
 
-    @JsonProperty("user_id")
-    private Integer user;
+    @JsonProperty("image_url")
+    private String imageUrl;
 
-    @JsonProperty("username")
-    private String userName;
-
-    private String period;
-
-    @JsonProperty("notification_threshold")
-    private Integer notificationThreshold;
+    @JsonProperty("is_active")
+    private Boolean isActive;
 }

@@ -24,10 +24,6 @@ public class Budget {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @ManyToOne()
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Period period;
