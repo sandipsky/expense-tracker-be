@@ -20,7 +20,7 @@ public class TransactionController {
     private TransactionService service;
 
     @GetMapping()
-    public List<Transaction> getTransactions() {
+    public List<TransactionDTO> getTransactions() {
         return service.getTransactions();
     }
 

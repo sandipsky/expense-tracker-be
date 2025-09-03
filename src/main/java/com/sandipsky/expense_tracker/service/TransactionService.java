@@ -15,6 +15,7 @@ import com.sandipsky.expense_tracker.repository.TransactionRepository;
 import com.sandipsky.expense_tracker.repository.UserRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TransactionService {
@@ -37,8 +38,11 @@ public class TransactionService {
         return repository.save(transaction);
     }
 
-    public List<Transaction> getTransactions() {
-        return repository.findAll();
+    public List<TransactionDTO> getTransactions() {
+        return repository.findAll()
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
     }
 
     public TransactionDTO getTransactionById(int id) {

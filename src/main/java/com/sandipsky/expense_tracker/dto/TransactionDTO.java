@@ -10,6 +10,7 @@ public class TransactionDTO {
 
     private String date;
 
+    @JsonProperty("system_entry_no")
     private String systemEntryNo;
 
     private Double amount;
@@ -25,7 +26,7 @@ public class TransactionDTO {
     @JsonProperty("user_id")
     private Integer userId;
 
-    @JsonProperty("username")
+    @JsonProperty("user_name")
     private String userName;
 
     @JsonProperty("account_id")
