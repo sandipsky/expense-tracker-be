@@ -10,6 +10,7 @@ import com.sandipsky.expense_tracker.exception.ResourceNotFoundException;
 import com.sandipsky.expense_tracker.repository.CategoryRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
@@ -29,8 +30,11 @@ public class CategoryService {
         return repository.save(category);
     }
 
-    public List<Category> getCategorys() {
-        return repository.findAll();
+    public List<CategoryDTO> getCategorys() {
+        return repository.findAll()
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
     }
 
     public CategoryDTO getCategoryById(int id) {

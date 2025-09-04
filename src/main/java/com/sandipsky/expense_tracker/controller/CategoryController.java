@@ -20,7 +20,7 @@ public class CategoryController {
     private CategoryService service;
 
     @GetMapping()
-    public List<Category> getCategorys() {
+    public List<CategoryDTO> getCategorys() {
         return service.getCategorys();
     }
 
