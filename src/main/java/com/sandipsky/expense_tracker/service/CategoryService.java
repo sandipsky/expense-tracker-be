@@ -39,8 +39,8 @@ public class CategoryService {
 
     public Page<CategoryDTO> getCategorys(PageRequestDTO request) {
         Specification<Category> spec = specBuilder.buildSpecification(
-                request.getFilterDTO(),
-                request.getSortDTO() // pass the sort here
+                request.getFilter(),
+                request.getSort() // pass the sort here
         );
 
         PageRequest pageable = PageRequest.of(

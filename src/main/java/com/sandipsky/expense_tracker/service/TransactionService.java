@@ -46,8 +46,8 @@ public class TransactionService {
 
     public Page<TransactionDTO> getTransactions(PageRequestDTO request) {
         Specification<Transaction> spec = specBuilder.buildSpecification(
-                request.getFilterDTO(),
-                request.getSortDTO());
+                request.getFilter(),
+                request.getSort());
 
         PageRequest pageable = PageRequest.of(
                 request.getPageIndex(),

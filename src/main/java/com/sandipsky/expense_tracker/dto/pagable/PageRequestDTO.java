@@ -10,6 +10,6 @@ import lombok.Setter;
 public class PageRequestDTO {
     private int pageIndex;
     private int pageSize;
-    private List<FilterSortDTO> sortDTO;
-    private List<FilterSortDTO> filterDTO;
+    private List<FilterSortDTO> sort;
+    private List<FilterSortDTO> filter;
 }
