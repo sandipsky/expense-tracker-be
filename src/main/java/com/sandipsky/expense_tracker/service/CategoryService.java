@@ -1,22 +1,29 @@
 package com.sandipsky.expense_tracker.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.sandipsky.expense_tracker.dto.CategoryDTO;
+import com.sandipsky.expense_tracker.dto.pagable.PageRequestDTO;
 import com.sandipsky.expense_tracker.entity.Category;
 import com.sandipsky.expense_tracker.exception.DuplicateResourceException;
 import com.sandipsky.expense_tracker.exception.ResourceNotFoundException;
 import com.sandipsky.expense_tracker.repository.CategoryRepository;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import com.sandipsky.expense_tracker.util.FilterSortSpecBuilder;
 
 @Service
 public class CategoryService {
 
     @Autowired
     private CategoryRepository repository;
+
+    private final FilterSortSpecBuilder<Category> specBuilder = new FilterSortSpecBuilder<>();
 
     public Category saveCategory(CategoryDTO categoryDTO) {
         if (categoryDTO.getName() == null || categoryDTO.getName().trim().isEmpty()) {
@@ -30,7 +37,21 @@ public class CategoryService {
         return repository.save(category);
     }
 
-    public List<CategoryDTO> getCategorys() {
+    public Page<CategoryDTO> getCategorys(PageRequestDTO request) {
+        Specification<Category> spec = specBuilder.buildSpecification(
+                request.getFilterDTO(),
+                request.getSortDTO() // pass the sort here
+        );
+
+        PageRequest pageable = PageRequest.of(
+                request.getPageIndex(),
+                request.getPageSize());
+
+        Page<Category> productPage = repository.findAll(spec, pageable);
+        return productPage.map(this::mapToDTO);
+    }
+
+    public List<CategoryDTO> getAllCategory() {
         return repository.findAll()
                 .stream()
                 .map(this::mapToDTO)

@@ -1,9 +1,15 @@
 package com.sandipsky.expense_tracker.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
 import com.sandipsky.expense_tracker.dto.TransactionDTO;
+import com.sandipsky.expense_tracker.dto.pagable.PageRequestDTO;
 import com.sandipsky.expense_tracker.entity.Account;
 import com.sandipsky.expense_tracker.entity.Category;
 import com.sandipsky.expense_tracker.entity.Transaction;
@@ -13,9 +19,7 @@ import com.sandipsky.expense_tracker.repository.AccountRepository;
 import com.sandipsky.expense_tracker.repository.CategoryRepository;
 import com.sandipsky.expense_tracker.repository.TransactionRepository;
 import com.sandipsky.expense_tracker.repository.UserRepository;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import com.sandipsky.expense_tracker.util.FilterSortSpecBuilder;
 
 @Service
 public class TransactionService {
@@ -32,13 +36,28 @@ public class TransactionService {
     @Autowired
     private AccountRepository accountRepository;
 
+    private final FilterSortSpecBuilder<Transaction> specBuilder = new FilterSortSpecBuilder<>();
+
     public Transaction saveTransaction(TransactionDTO transactionDTO) {
         Transaction transaction = new Transaction();
         mapDtoToEntity(transactionDTO, transaction);
         return repository.save(transaction);
     }
 
-    public List<TransactionDTO> getTransactions() {
+    public Page<TransactionDTO> getTransactions(PageRequestDTO request) {
+        Specification<Transaction> spec = specBuilder.buildSpecification(
+                request.getFilterDTO(),
+                request.getSortDTO());
+
+        PageRequest pageable = PageRequest.of(
+                request.getPageIndex(),
+                request.getPageSize());
+
+        Page<Transaction> page = repository.findAll(spec, pageable);
+        return page.map(this::mapToDTO);
+    }
+
+    public List<TransactionDTO> getAllTransactions() {
         return repository.findAll()
                 .stream()
                 .map(this::mapToDTO)
