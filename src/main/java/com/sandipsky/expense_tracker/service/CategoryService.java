@@ -4,26 +4,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.sandipsky.expense_tracker.dto.CategoryDTO;
-import com.sandipsky.expense_tracker.dto.pagable.PageRequestDTO;
 import com.sandipsky.expense_tracker.entity.Category;
 import com.sandipsky.expense_tracker.exception.DuplicateResourceException;
 import com.sandipsky.expense_tracker.exception.ResourceNotFoundException;
 import com.sandipsky.expense_tracker.repository.CategoryRepository;
-import com.sandipsky.expense_tracker.util.FilterSortSpecBuilder;
 
 @Service
 public class CategoryService {
 
     @Autowired
     private CategoryRepository repository;
-
-    private final FilterSortSpecBuilder<Category> specBuilder = new FilterSortSpecBuilder<>();
 
     public Category saveCategory(CategoryDTO categoryDTO) {
         if (categoryDTO.getName() == null || categoryDTO.getName().trim().isEmpty()) {
@@ -35,20 +28,6 @@ public class CategoryService {
         Category category = new Category();
         mapDtoToEntity(categoryDTO, category);
         return repository.save(category);
-    }
-
-    public Page<CategoryDTO> getCategorys(PageRequestDTO request) {
-        Specification<Category> spec = specBuilder.buildSpecification(
-                request.getFilter(),
-                request.getSort() // pass the sort here
-        );
-
-        PageRequest pageable = PageRequest.of(
-                request.getPageIndex(),
-                request.getPageSize());
-
-        Page<Category> productPage = repository.findAll(spec, pageable);
-        return productPage.map(this::mapToDTO);
     }
 
     public List<CategoryDTO> getAllCategory() {

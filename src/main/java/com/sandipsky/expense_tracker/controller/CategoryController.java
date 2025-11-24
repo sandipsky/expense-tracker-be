@@ -3,13 +3,11 @@ package com.sandipsky.expense_tracker.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.sandipsky.expense_tracker.dto.ApiResponse;
 import com.sandipsky.expense_tracker.dto.CategoryDTO;
-import com.sandipsky.expense_tracker.dto.pagable.PageRequestDTO;
 import com.sandipsky.expense_tracker.entity.Category;
 import com.sandipsky.expense_tracker.service.CategoryService;
 import com.sandipsky.expense_tracker.util.ResponseUtil;
@@ -24,11 +22,6 @@ public class CategoryController {
     @GetMapping()
     public List<CategoryDTO> getAllCategory() {
         return service.getAllCategory();
-    }
-
-    @PostMapping("")
-    public Page<CategoryDTO> getCategorys(@RequestBody PageRequestDTO requestDTO) {
-        return service.getCategorys(requestDTO);
     }
 
     @GetMapping("/{id}")
