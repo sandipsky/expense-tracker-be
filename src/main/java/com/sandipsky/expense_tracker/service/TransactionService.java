@@ -41,6 +41,9 @@ public class TransactionService {
     public Transaction saveTransaction(TransactionDTO transactionDTO) {
         Transaction transaction = new Transaction();
         mapDtoToEntity(transactionDTO, transaction);
+        if (transaction.getSystemEntryNo() == null || transaction.getSystemEntryNo().isEmpty()) {
+            transaction.setSystemEntryNo(generateSystemEntryNo());
+        }
         return repository.save(transaction);
     }
 
@@ -86,7 +89,6 @@ public class TransactionService {
     private TransactionDTO mapToDTO(Transaction transaction) {
         TransactionDTO dto = new TransactionDTO();
         dto.setId(transaction.getId());
-        dto.setSystemEntryNo(transaction.getSystemEntryNo());
         dto.setAmount(transaction.getAmount());
         dto.setDate(transaction.getDate());
         dto.setRemarks(transaction.getRemarks());
@@ -119,5 +121,18 @@ public class TransactionService {
                     .orElseThrow(() -> new ResourceNotFoundException("Account not found"));
             transaction.setAccount(account);
         }
+    }
+
+    public String generateSystemEntryNo() {
+        String prefix = "T-";
+        Transaction lastTransaction = repository.findTopByOrderByIdDesc();
+
+        if (lastTransaction == null || lastTransaction.getSystemEntryNo() == null) {
+            return prefix + "00001";
+        }
+
+        String lastNumber = lastTransaction.getSystemEntryNo().replace(prefix, "");
+        int nextNumber = Integer.parseInt(lastNumber) + 1;
+        return prefix + String.format("%05d", nextNumber);
     }
 }

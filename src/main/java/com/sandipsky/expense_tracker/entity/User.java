@@ -2,6 +2,7 @@ package com.sandipsky.expense_tracker.entity;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -43,7 +44,7 @@ public class User implements UserDetails {
     private Integer failedAttempt = 0;
 
     @Column(name = "lock_time")
-    private LocalDateTime lockTime;
+    private Date lockTime;
 
     @Column(name = "created_at", updatable = false)
     @org.hibernate.annotations.CreationTimestamp

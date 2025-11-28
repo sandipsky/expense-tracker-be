@@ -43,7 +43,8 @@ public class TransactionController {
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<ApiResponse<Transaction>> updateTransaction(@PathVariable int id, @RequestBody TransactionDTO transactionDTO) {
+    public ResponseEntity<ApiResponse<Transaction>> updateTransaction(@PathVariable int id,
+            @RequestBody TransactionDTO transactionDTO) {
         Transaction res = service.updateTransaction(id, transactionDTO);
         return ResponseEntity.ok(ResponseUtil.success(res.getId(), "Transaction Updated successfully"));
     }
@@ -52,5 +53,10 @@ public class TransactionController {
     public ResponseEntity<ApiResponse<Transaction>> deleteTransaction(@PathVariable int id) {
         service.deleteTransaction(id);
         return ResponseEntity.ok(ResponseUtil.success(id, "Transaction Deleted successfully"));
+    }
+
+    @GetMapping("/getEntryNumber")
+    public String generateTransactionNumber() {
+        return service.generateSystemEntryNo();
     }
 }

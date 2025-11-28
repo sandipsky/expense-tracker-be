@@ -1,11 +1,16 @@
 package com.sandipsky.expense_tracker.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+
+import com.sandipsky.expense_tracker.dto.DropdownDTO;
 import com.sandipsky.expense_tracker.entity.User;
 
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecificationExecutor<User> {
     boolean existsByUsername(String username);
 
     boolean existsByEmail(String email);
@@ -15,4 +20,12 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     boolean existsByEmailAndIdNot(String email, int id);
 
     Optional<User> findByUsername(String username);
+
+    @Query("""
+                SELECT new com.sandipsky.expense_tracker.dto.DropdownDTO(u.id, u.username)
+                FROM User u
+                WHERE (:isActive IS NULL OR u.isActive = :isActive)
+            """)
+    List<DropdownDTO> findFilteredDropdown(
+            Boolean isActive);
 }

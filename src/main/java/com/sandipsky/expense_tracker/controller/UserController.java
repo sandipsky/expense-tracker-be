@@ -2,12 +2,14 @@ package com.sandipsky.expense_tracker.controller;
 
 import com.sandipsky.expense_tracker.dto.ApiResponse;
 import com.sandipsky.expense_tracker.dto.UserDTO;
+import com.sandipsky.expense_tracker.dto.pagable.PageRequestDTO;
 import com.sandipsky.expense_tracker.entity.User;
 import com.sandipsky.expense_tracker.service.UserService;
 import com.sandipsky.expense_tracker.util.ResponseUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +27,11 @@ public class UserController {
     @GetMapping()
     public List<UserDTO> getUsers() {
         return service.getUsers();
+    }
+    
+    @PostMapping("/view")
+    public Page<UserDTO> getPaginatedUsersList(@RequestBody PageRequestDTO request) {
+        return service.getPaginatedUsersList(request);
     }
 
     @GetMapping("/{id}")

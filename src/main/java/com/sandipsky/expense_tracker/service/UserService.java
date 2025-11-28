@@ -3,15 +3,21 @@ package com.sandipsky.expense_tracker.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sandipsky.expense_tracker.dto.UserDTO;
+import com.sandipsky.expense_tracker.dto.pagable.PageRequestDTO;
 import com.sandipsky.expense_tracker.entity.User;
 import com.sandipsky.expense_tracker.exception.DuplicateResourceException;
 import com.sandipsky.expense_tracker.exception.ResourceNotFoundException;
 import com.sandipsky.expense_tracker.repository.UserRepository;
+import com.sandipsky.expense_tracker.util.FilterSortSpecBuilder;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.IOException;
@@ -31,6 +37,8 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    private final FilterSortSpecBuilder<User> specBuilder = new FilterSortSpecBuilder<>();
+
     @Transactional
     public User saveUser(UserDTO dto, MultipartFile imageFile) {
         if (repository.existsByUsername(dto.getUsername())) {
@@ -47,6 +55,19 @@ public class UserService {
             user.setImageUrl(imageUrl);
         }
         return repository.save(user);
+    }
+
+    public Page<UserDTO> getPaginatedUsersList(PageRequestDTO request) {
+        Specification<User> spec = specBuilder.buildSpecification(
+                request.getFilter(),
+                request.getSort());
+
+        PageRequest pageable = PageRequest.of(
+                request.getPageIndex(),
+                request.getPageSize());
+
+        Page<User> page = repository.findAll(spec, pageable);
+        return page.map(this::mapToDTO);
     }
 
     public List<UserDTO> getUsers() {
